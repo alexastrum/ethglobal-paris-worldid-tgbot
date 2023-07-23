@@ -109,3 +109,5 @@ serve(async (req) => {
     console.error(err);
   }
 });
+
+// TODO: Watch Supabase DB for World Id signals and send to Telegram

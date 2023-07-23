@@ -1,36 +1,35 @@
-# World ID Next.js Template
+# World Id Telegram Bot
 
-This is a template repository for creating a new project using Next.js, TailwindCSS, and the [World ID SDK](https://id.worldcoin.org). This template isn't intended for use cases that require on-chain verification, but rather for use cases that leverage off-chain web backend verification.
+https://wrldid-tgbot.vercel.app
+
+I created a simple Telegram bot that will help Telegram admins make sure their DAO channels are safe from unwanted bots, duplicate accounts, and other unwanted members. In this initial version, we use Worldcoin Anonymous Actions to perform following important tasks:
+
+- Make sure each participant of the chat room is a real human, and only one account per human participant is allowed at one time.
+- Allow participants to vote anonymously.
+- Allow participants to relay anonymous messages through our bot, should they want to raise a concern without revealing their identity.
+
+I used Worldcoin Anonymous Actions with unlimited signals per user and rely on nullifier_hash values to prevent sybil attacks and allow users to update their choices.
+
+By using custom signals we can group distinct choices under the same action and track things like userId association and votes when needed, while preserving anonymity when necessary.
 
 ## Getting Started
-
-First, set the correct Node.js version using `nvm` and run the development server:
 
 ```bash
 nvm use 18
 pnpm i && pnpm dev
 ```
 
-Copy `.env.example` to `.env.local` and add your World ID App ID and Action Name to the appropriate variables.
+## Deploy main app on Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The easiest way to deploy your Next.js app is to use the Vercel GitHub integration. Push your code to GitHub and Vercel will deploy it automatically.
 
-This template includes an API route to verify the proof returned by the IDKit widget at `/api/verify`. Edit `src/pages/api/verify.ts` to handle any backend functions you need to perform.
+## Supabase Telegram bot backend
 
-You can start editing the page by modifying `src/pages/index.tsx`. The page auto-updates as you edit the file. Edit the `onSuccess` function to define frontend behavior once the proof has been verified.
+For the bot to work, you need to create a Supabase project and link it to your Telegram bot. You can do this by running the following commands:
 
-The `src/pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js and World ID, take a look at the following resources:
-
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
--   [World ID Documentation](https://docs.worldcoin.org/) - learn about World ID features and API.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+supabase login
+supabase link --project-ref YOUR_PROJECT_ID
+supabase secrets set --env-file ./supabase/.env
+supabase functions deploy --no-verify-jwt
+```

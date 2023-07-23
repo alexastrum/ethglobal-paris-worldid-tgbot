@@ -47,6 +47,14 @@ export default function handler(
           "Credential verified! This user's nullifier hash is: ",
           wldResponse.nullifier_hash
         );
+
+        const persistData = {
+          action: wldResponse.action, // auth || chat-$chatId
+          signal: wldResponse.signal, // payload {userId?, vote?, msg?}
+          nullifier_hash: wldResponse.nullifier_hash, // unique pseudonimous user id
+        };
+        // TODO: Persist to Supabase DB
+
         res.status(verifyRes.status).send({
           code: "success",
           detail: "This action verified correctly!",
