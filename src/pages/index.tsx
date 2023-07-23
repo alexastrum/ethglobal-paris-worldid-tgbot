@@ -20,7 +20,7 @@ export default function Home() {
       proof: result.proof,
       credential_type: result.credential_type,
       action: process.env.NEXT_PUBLIC_WLD_ACTION_NAME,
-      signal: "",
+      signal,
     };
     console.log(
       "Sending proof to backend for verification:\n",
@@ -49,12 +49,11 @@ export default function Home() {
     <div>
       <div className="flex flex-col items-center justify-center align-middle h-screen">
         <p className="text-2xl mb-5">World ID Cloud Template</p>
-        // ... return (
         <input
+          className="border border-black rounded-md mx-3 my-1 px-3 py-1"
           value={signal} // ...force the input's value to match the state variable...
           onChange={(e) => setSignal(e.target.value)} // ... and update the state variable on any edits!
         />
-        );
         <IDKitWidget
           action={process.env.NEXT_PUBLIC_WLD_ACTION_NAME!}
           app_id={process.env.NEXT_PUBLIC_WLD_APP_ID!}
