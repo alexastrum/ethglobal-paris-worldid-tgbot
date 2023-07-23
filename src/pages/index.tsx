@@ -1,6 +1,7 @@
 import { CredentialType, IDKitWidget } from "@worldcoin/idkit";
 import type { ISuccessResult } from "@worldcoin/idkit";
 import type { VerifyReply } from "./api/verify";
+import { useState } from "react";
 
 export default function Home() {
   const onSuccess = (result: ISuccessResult) => {
@@ -42,18 +43,25 @@ export default function Home() {
       ); // Throw an error if verification fails
     }
   };
+  const [signal, setSignal] = useState("user_value"); // Declare a state variable...
 
   return (
     <div>
       <div className="flex flex-col items-center justify-center align-middle h-screen">
         <p className="text-2xl mb-5">World ID Cloud Template</p>
+        // ... return (
+        <input
+          value={signal} // ...force the input's value to match the state variable...
+          onChange={(e) => setSignal(e.target.value)} // ... and update the state variable on any edits!
+        />
+        );
         <IDKitWidget
           action={process.env.NEXT_PUBLIC_WLD_ACTION_NAME!}
           app_id={process.env.NEXT_PUBLIC_WLD_APP_ID!}
           onSuccess={onSuccess}
           handleVerify={handleProof}
           credential_types={[CredentialType.Orb, CredentialType.Phone]}
-          signal="user_value"
+          signal={signal}
           autoClose
           enableTelemetry
         >
