@@ -8,6 +8,7 @@ console.log(`Function "telegram-bot" up and running!`);
 
 import { Bot, webhookCallback, Context, session, SessionFlavor } from "grammy";
 import { freeStorage } from "https://deno.land/x/grammy_storages@v2.3.0/free/src/mod.ts";
+// import { crypto } from "https://deno.land/std@0.195.0/crypto/mod.ts";
 
 // import { supabaseAdapter } from "https://deno.land/x/grammy_storages@v2.3.0/supabase/src/mod.ts";
 import { createClient } from "@supabase/supabase-js";
@@ -45,7 +46,9 @@ supabase
 const bot = new Bot<MyContext>(Deno.env.get("TELEGRAM_BOT_TOKEN") || "");
 bot.use(
   session({
-    initial: () => ({ counter: 0 }),
+    initial: () => ({
+      counter: 0,
+    }),
     storage: freeStorage<SessionData>(bot.token),
   })
 );
@@ -56,14 +59,40 @@ bot.command("inc", (ctx) => ctx.session.counter++);
 
 bot.command("counter", (ctx) => ctx.reply(ctx.session.counter));
 
-bot.command("ping", (ctx) =>
-  ctx.reply(`Pong! ${new Date()} ${Date.now()}`, {
-    reply_to_message_id: ctx.msg.message_id,
-    parse_mode: "MarkdownV2",
-  })
-);
+bot.command("anon", (ctx) => {
+  ctx.reply(
+    `Anyone can <a href="https://wrldid-tgbot.vercel.app/?chat=${ctx.msg.chat.id}">anonymously post to the group</a>`,
+    {
+      reply_to_message_id: ctx.msg.message_id,
+      parse_mode: "HTML",
+    }
+  );
+});
 
-bot.on("message", (ctx) => {});
+bot.command("vote", (ctx) => {
+  ctx.reply(
+    `Poll #1 Do you find this useful?<br />
+     Vote <a href="https://wrldid-tgbot.vercel.app/?vote=${ctx.msg.chat.id},1,yes">YES</a> or
+     <a href="https://wrldid-tgbot.vercel.app/?vote=${ctx.msg.chat.id},1,no">NO</a>`,
+    {
+      reply_to_message_id: ctx.msg.message_id,
+      parse_mode: "HTML",
+    }
+  );
+});
+
+bot.command("auth", (ctx) => {
+  console.log(ctx);
+  ctx.reply(
+    `<a href="https://wrldid-tgbot.vercel.app/?id=${ctx.msg.from.id}">Claim your username ${ctx.msg.from.username} using WorldId</a> to be allowed to post to this group.`,
+    {
+      reply_to_message_id: ctx.msg.message_id,
+      parse_mode: "HTML",
+    }
+  );
+});
+
+// bot.on("message", (ctx) => {});
 
 const handleUpdate = webhookCallback(bot, "std/http");
 
