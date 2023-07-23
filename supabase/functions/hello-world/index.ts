@@ -10,7 +10,7 @@ import { Bot, webhookCallback, Context, session, SessionFlavor } from "grammy";
 import { freeStorage } from "https://deno.land/x/grammy_storages@v2.3.0/free/src/mod.ts";
 
 // import { supabaseAdapter } from "https://deno.land/x/grammy_storages@v2.3.0/supabase/src/mod.ts";
-// import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
 interface SessionData {
   counter: number;
@@ -18,21 +18,29 @@ interface SessionData {
 type MyContext = Context & SessionFlavor<SessionData>;
 
 // supabase instance
-// const supabase = createClient(
-//   // Supabase API URL - env var exported by default.
-//   Deno.env.get("SUPABASE_URL") ?? "",
-//   // Supabase API ANON KEY - env var exported by default.
-//   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-//   // Create client with Auth context of the user that called the function.
-//   // This way your row-level-security (RLS) policies are applied.
-//   // { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
-// );
+const supabase = createClient(
+  // Supabase API URL - env var exported by default.
+  Deno.env.get("SUPABASE_URL") ?? "",
+  // Supabase API ANON KEY - env var exported by default.
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+  // Create client with Auth context of the user that called the function.
+  // This way your row-level-security (RLS) policies are applied.
+  // { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+);
 
 // //create storage
 // const storage = supabaseAdapter({
 //   supabase,
 //   table: "sessions", // the defined table name you want to use to store your session
 // });
+
+supabase
+  .from("sessions")
+  .select("*")
+  .eq("id", "xxx")
+  .then((res) => {
+    console.log(res.data);
+  });
 
 const bot = new Bot<MyContext>(Deno.env.get("TELEGRAM_BOT_TOKEN") || "");
 bot.use(
