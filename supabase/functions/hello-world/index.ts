@@ -53,11 +53,13 @@ bot.use(
   })
 );
 
-bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
+bot.command("start", (ctx) =>
+  ctx.reply("Welcome! Available commands: /anon, /vote, /auth")
+);
 
-bot.command("inc", (ctx) => ctx.session.counter++);
+// bot.command("inc", (ctx) => ctx.session.counter++);
 
-bot.command("counter", (ctx) => ctx.reply(ctx.session.counter));
+// bot.command("counter", (ctx) => ctx.reply(ctx.session.counter));
 
 bot.command("anon", (ctx) => {
   ctx.reply(
@@ -71,9 +73,9 @@ bot.command("anon", (ctx) => {
 
 bot.command("vote", (ctx) => {
   ctx.reply(
-    `Poll #1 Do you find this useful?<br />
-     Vote <a href="https://wrldid-tgbot.vercel.app/?vote=${ctx.msg.chat.id},1,yes">YES</a> or
-     <a href="https://wrldid-tgbot.vercel.app/?vote=${ctx.msg.chat.id},1,no">NO</a>`,
+    `Poll #1 Do you find this useful?
+     Vote <a href="https://wrldid-tgbot.vercel.app/?chat=${ctx.msg.chat.id}&vote=YES">YES</a> or
+     <a href="https://wrldid-tgbot.vercel.app/?chat=${ctx.msg.chat.id}&vote=NO">NO</a>`,
     {
       reply_to_message_id: ctx.msg.message_id,
       parse_mode: "HTML",
@@ -84,7 +86,7 @@ bot.command("vote", (ctx) => {
 bot.command("auth", (ctx) => {
   console.log(ctx);
   ctx.reply(
-    `<a href="https://wrldid-tgbot.vercel.app/?id=${ctx.msg.from.id}">Claim your username ${ctx.msg.from.username} using WorldId</a> to be allowed to post to this group.`,
+    `<a href="https://wrldid-tgbot.vercel.app/?userId=${ctx.msg.from.id}">Claim your username ${ctx.msg.from.username} using WorldId</a> to be allowed to post to this group.`,
     {
       reply_to_message_id: ctx.msg.message_id,
       parse_mode: "HTML",
