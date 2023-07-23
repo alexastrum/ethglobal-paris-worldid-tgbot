@@ -13,7 +13,7 @@ export default function Home() {
   const vote = query["vote"] || "";
 
   const signal = JSON.stringify({ userId, vote, msg });
-  const action = `tgbot-${chat}`;
+  const action = chat ? `act-${chat}` : "auth";
 
   const onSuccess = (result: ISuccessResult) => {
     // This is where you should perform frontend actions once a user has been verified, such as redirecting to a new page
@@ -80,7 +80,7 @@ export default function Home() {
         )}
         {(!!userId || !!chat) && (
           <IDKitWidget
-            action={process.env.NEXT_PUBLIC_WLD_ACTION_NAME!}
+            action={action}
             app_id={process.env.NEXT_PUBLIC_WLD_APP_ID!}
             onSuccess={onSuccess}
             handleVerify={handleProof}
